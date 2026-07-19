@@ -3,7 +3,7 @@ package service
 import (
 	"testing"
 
-	"github.com/omniroute-go/internal/model"
+	"github.com/ghstouch/one-go/internal/model"
 )
 
 func TestSelectTarget_Priority(t *testing.T) {

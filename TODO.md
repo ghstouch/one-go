@@ -1,4 +1,4 @@
-# OmniRoute Go - Project TODO
+# One Go - Project TODO
 
 ## 📋 Analisis Repository OmniRoute (diegosouzapw/OmniRoute)
 
@@ -366,7 +366,7 @@ ProxyLog
 ## 📁 Folder Structure
 
 ```
-omniroute-go/
+one-go/
 ├── cmd/
 │   └── server/
 │       └── main.go

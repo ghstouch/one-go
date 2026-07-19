@@ -1,4 +1,4 @@
-# OmniRoute Go
+# One Go
 
 AI Gateway/Router built with Go - A self-hosted LLM routing solution.
 
@@ -30,8 +30,8 @@ AI Gateway/Router built with Go - A self-hosted LLM routing solution.
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/omniroute-go.git
-cd omniroute-go
+git clone https://github.com/yourusername/one-go.git
+cd one-go
 ```
 
 2. Copy environment file:
@@ -47,7 +47,7 @@ GIN_MODE=debug
 
 # Database
 DB_DRIVER=sqlite
-SQLITE_PATH=./storage/omniroute.db
+SQLITE_PATH=./storage/one.db
 
 # JWT
 JWT_SECRET=your-secret-key
@@ -158,7 +158,7 @@ go run ./cmd/server/main.go
 ## Project Structure
 
 ```
-omniroute-go/
+one-go/
 ├── cmd/
 │   └── server/
 │       └── main.go           # Application entry point

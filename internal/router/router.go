@@ -4,12 +4,12 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/omniroute-go/internal/config"
-	"github.com/omniroute-go/internal/database"
-	"github.com/omniroute-go/internal/handler"
-	"github.com/omniroute-go/internal/middleware"
-	"github.com/omniroute-go/internal/repository"
-	"github.com/omniroute-go/internal/service"
+	"github.com/ghstouch/one-go/internal/config"
+	"github.com/ghstouch/one-go/internal/database"
+	"github.com/ghstouch/one-go/internal/handler"
+	"github.com/ghstouch/one-go/internal/middleware"
+	"github.com/ghstouch/one-go/internal/repository"
+	"github.com/ghstouch/one-go/internal/service"
 )
 
 // Setup initializes and returns the router
@@ -205,7 +205,7 @@ func Setup(cfg *config.Config) *gin.Engine {
 
 		web.GET("/login", func(c *gin.Context) {
 			c.HTML(200, "login.html", gin.H{
-				"title": "Login - OmniRoute",
+				"title": "Login - One",
 			})
 		})
 
@@ -216,7 +216,7 @@ func Setup(cfg *config.Config) *gin.Engine {
 			webProtected.GET("/dashboard", func(c *gin.Context) {
 				username := middleware.GetUsernameFromContext(c)
 				c.HTML(200, "dashboard.html", gin.H{
-					"title":    "Dashboard - OmniRoute",
+					"title":    "Dashboard - One",
 					"username": username,
 					"active":   "dashboard",
 				})
@@ -225,7 +225,7 @@ func Setup(cfg *config.Config) *gin.Engine {
 			webProtected.GET("/providers", func(c *gin.Context) {
 				username := middleware.GetUsernameFromContext(c)
 				c.HTML(200, "providers.html", gin.H{
-					"title":    "Providers - OmniRoute",
+					"title":    "Providers - One",
 					"username": username,
 					"active":   "providers",
 				})
@@ -234,7 +234,7 @@ func Setup(cfg *config.Config) *gin.Engine {
 			webProtected.GET("/combos", func(c *gin.Context) {
 				username := middleware.GetUsernameFromContext(c)
 				c.HTML(200, "combos.html", gin.H{
-					"title":    "Combos - OmniRoute",
+					"title":    "Combos - One",
 					"username": username,
 					"active":   "combos",
 				})
@@ -243,7 +243,7 @@ func Setup(cfg *config.Config) *gin.Engine {
 			webProtected.GET("/usage", func(c *gin.Context) {
 				username := middleware.GetUsernameFromContext(c)
 				c.HTML(200, "usage.html", gin.H{
-					"title":    "Usage - OmniRoute",
+					"title":    "Usage - One",
 					"username": username,
 					"active":   "usage",
 				})
@@ -252,7 +252,7 @@ func Setup(cfg *config.Config) *gin.Engine {
 			webProtected.GET("/logs", func(c *gin.Context) {
 				username := middleware.GetUsernameFromContext(c)
 				c.HTML(200, "logs.html", gin.H{
-					"title":    "Logs - OmniRoute",
+					"title":    "Logs - One",
 					"username": username,
 					"active":   "logs",
 				})
@@ -261,7 +261,7 @@ func Setup(cfg *config.Config) *gin.Engine {
 			webProtected.GET("/api-keys", func(c *gin.Context) {
 				username := middleware.GetUsernameFromContext(c)
 				c.HTML(200, "apikeys.html", gin.H{
-					"title":    "API Keys - OmniRoute",
+					"title":    "API Keys - One",
 					"username": username,
 					"active":   "api-keys",
 				})
@@ -270,7 +270,7 @@ func Setup(cfg *config.Config) *gin.Engine {
 			webProtected.GET("/proxy", func(c *gin.Context) {
 				username := middleware.GetUsernameFromContext(c)
 				c.HTML(200, "proxy.html", gin.H{
-					"title":    "Proxy - OmniRoute",
+					"title":    "Proxy - One",
 					"username": username,
 					"active":   "proxy",
 				})
@@ -279,7 +279,7 @@ func Setup(cfg *config.Config) *gin.Engine {
 			webProtected.GET("/settings-page", func(c *gin.Context) {
 				username := middleware.GetUsernameFromContext(c)
 				c.HTML(200, "settings.html", gin.H{
-					"title":    "Settings - OmniRoute",
+					"title":    "Settings - One",
 					"username": username,
 					"active":   "settings",
 				})

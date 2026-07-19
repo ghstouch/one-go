@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/omniroute-go/internal/service"
+	"github.com/ghstouch/one-go/internal/service"
 )
 
 // AuditMiddleware logs admin actions automatically

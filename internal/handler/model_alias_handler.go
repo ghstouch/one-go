@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/omniroute-go/internal/model"
-	"github.com/omniroute-go/internal/service"
-	"github.com/omniroute-go/pkg/response"
+	"github.com/ghstouch/one-go/internal/model"
+	"github.com/ghstouch/one-go/internal/service"
+	"github.com/ghstouch/one-go/pkg/response"
 )
 
 // ModelAliasHandler handles model alias HTTP requests

@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/omniroute-go/internal/model"
+	"github.com/ghstouch/one-go/internal/model"
 )
 
 // RoutingService selects a combo target based on strategy

@@ -1,7 +1,7 @@
 .PHONY: all build run clean test lint dev
 
 # Variables
-BINARY_NAME=omniroute
+BINARY_NAME=one
 MAIN_PATH=./cmd/server
 BUILD_DIR=./bin
 
@@ -69,12 +69,12 @@ build-all:
 # Docker build
 docker-build:
 	@echo "Building Docker image..."
-	@docker build -t omniroute-go:latest .
+	@docker build -t one-go:latest .
 
 # Docker run
 docker-run:
 	@echo "Running Docker container..."
-	@docker run -p 8080:8080 -v $(pwd)/storage:/app/storage omniroute-go:latest
+	@docker run -p 8080:8080 -v $(pwd)/storage:/app/storage one-go:latest
 
 # Initialize project (download deps, create dirs)
 init:

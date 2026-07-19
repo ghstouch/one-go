@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/omniroute-go/internal/model"
-	"github.com/omniroute-go/internal/repository"
+	"github.com/ghstouch/one-go/internal/model"
+	"github.com/ghstouch/one-go/internal/repository"
 )
 
 // ProviderService defines provider operations

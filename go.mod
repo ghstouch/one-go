@@ -1,4 +1,4 @@
-module github.com/omniroute-go
+module github.com/ghstouch/one-go
 
 go 1.24
 

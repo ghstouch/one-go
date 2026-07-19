@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/omniroute-go/internal/model"
+	"github.com/ghstouch/one-go/internal/model"
 )
 
 // mockApiKeyRepo implements repository.ApiKeyRepository for testing

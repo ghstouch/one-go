@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/omniroute-go/internal/model"
-	"github.com/omniroute-go/pkg/response"
+	"github.com/ghstouch/one-go/internal/model"
+	"github.com/ghstouch/one-go/pkg/response"
 )
 
 // RateLimiter stores rate limit data

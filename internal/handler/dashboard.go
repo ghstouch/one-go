@@ -2,8 +2,8 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/omniroute-go/internal/repository"
-	"github.com/omniroute-go/pkg/response"
+	"github.com/ghstouch/one-go/internal/repository"
+	"github.com/ghstouch/one-go/pkg/response"
 )
 
 // DashboardHandler handles dashboard HTTP requests

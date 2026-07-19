@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/omniroute-go/internal/model"
-	"github.com/omniroute-go/internal/service"
+	"github.com/ghstouch/one-go/internal/model"
+	"github.com/ghstouch/one-go/internal/service"
 )
 
 // mockAuthService implements service.AuthService for testing

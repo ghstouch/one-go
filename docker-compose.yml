@@ -1,19 +1,19 @@
 version: '3.8'
 
 services:
-  omniroute:
+  one:
     build: .
-    container_name: omniroute
+    container_name: one
     ports:
       - "8080:8080"
     volumes:
-      - omniroute-data:/app/storage
+      - one-data:/app/storage
     environment:
       - GIN_MODE=release
       - SERVER_PORT=8080
       - SERVER_HOST=0.0.0.0
       - DB_DRIVER=sqlite
-      - DB_SQLITE_PATH=/app/storage/omniroute.db
+      - DB_SQLITE_PATH=/app/storage/one.db
       - JWT_SECRET=change-me-in-production
       - LOG_LEVEL=info
     restart: unless-stopped
@@ -24,4 +24,4 @@ services:
       retries: 3
 
 volumes:
-  omniroute-data:
+  one-data:

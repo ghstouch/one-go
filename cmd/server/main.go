@@ -9,10 +9,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/omniroute-go/internal/config"
-	"github.com/omniroute-go/internal/database"
-	"github.com/omniroute-go/internal/router"
-	"github.com/omniroute-go/pkg/logger"
+	"github.com/ghstouch/one-go/internal/config"
+	"github.com/ghstouch/one-go/internal/database"
+	"github.com/ghstouch/one-go/internal/router"
+	"github.com/ghstouch/one-go/pkg/logger"
 )
 
 func main() {
@@ -30,7 +30,7 @@ func main() {
 	}
 	defer logger.Sync()
 
-	logger.Info("Starting OmniRoute Go...")
+	logger.Info("Starting One Go...")
 	logger.Infof("Server configuration: %s:%s", cfg.Server.Host, cfg.Server.Port)
 
 	// Initialize database

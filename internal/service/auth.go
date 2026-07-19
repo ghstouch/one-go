@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/omniroute-go/internal/config"
-	"github.com/omniroute-go/internal/model"
-	"github.com/omniroute-go/internal/repository"
+	"github.com/ghstouch/one-go/internal/config"
+	"github.com/ghstouch/one-go/internal/model"
+	"github.com/ghstouch/one-go/internal/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 

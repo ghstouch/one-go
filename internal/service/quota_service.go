@@ -3,7 +3,7 @@ package service
 import (
 	"time"
 
-	"github.com/omniroute-go/internal/repository"
+	"github.com/ghstouch/one-go/internal/repository"
 )
 
 // QuotaService provides quota tracking per provider

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/omniroute-go/internal/model"
+	"github.com/ghstouch/one-go/internal/model"
 )
 
 // UserRepository interface defines user data operations

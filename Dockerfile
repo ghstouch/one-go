@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN CGO_ENABLED=1 GOOS=linux go build -o /app/bin/omniroute ./cmd/server
+RUN CGO_ENABLED=1 GOOS=linux go build -o /app/bin/one ./cmd/server
 
 # Runtime stage
 FROM alpine:latest
@@ -25,7 +25,7 @@ WORKDIR /app
 RUN apk add --no-cache ca-certificates tzdata
 
 # Copy binary from builder
-COPY --from=builder /app/bin/omniroute /app/omniroute
+COPY --from=builder /app/bin/one /app/one
 
 # Copy web templates and static files
 COPY --from=builder /app/web /app/web
@@ -42,4 +42,4 @@ ENV SERVER_PORT=8080
 ENV SERVER_HOST=0.0.0.0
 
 # Run the application
-CMD ["/app/omniroute"]
+CMD ["/app/one"]

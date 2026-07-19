@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/omniroute-go/pkg/logger"
+	"github.com/ghstouch/one-go/pkg/logger"
 )
 
 // LoggingMiddleware creates a request logging middleware

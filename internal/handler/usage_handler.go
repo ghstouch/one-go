@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/omniroute-go/internal/service"
-	"github.com/omniroute-go/pkg/response"
+	"github.com/ghstouch/one-go/internal/service"
+	"github.com/ghstouch/one-go/pkg/response"
 )
 
 // UsageHandler handles usage HTTP requests
