@@ -9,15 +9,15 @@ import (
 
 // AuditLog represents an administrative action log
 type AuditLog struct {
-	ID        string    `gorm:"type:varchar(36);primaryKey" json:"id"`
-	UserID    string    `gorm:"type:varchar(36);index" json:"userId"`
-	Username  string    `gorm:"type:varchar(100)" json:"username"`
-	Action    string    `gorm:"type:varchar(50);not null;index" json:"action"` // create, update, delete, login, etc.
-	Resource  string    `gorm:"type:varchar(50);not null" json:"resource"`     // provider, combo, api_key, proxy, etc.
-	ResourceID string   `gorm:"type:varchar(36)" json:"resourceId,omitempty"`
-	Details   string    `gorm:"type:text" json:"details,omitempty"`
-	IPAddress string    `gorm:"type:varchar(45)" json:"ipAddress,omitempty"`
-	Timestamp time.Time `gorm:"index" json:"timestamp"`
+	ID         string    `gorm:"type:varchar(36);primaryKey" json:"id"`
+	UserID     string    `gorm:"type:varchar(36);index" json:"userId"`
+	Username   string    `gorm:"type:varchar(100)" json:"username"`
+	Action     string    `gorm:"type:varchar(50);not null;index" json:"action"` // create, update, delete, login, etc.
+	Resource   string    `gorm:"type:varchar(50);not null" json:"resource"`     // provider, combo, api_key, proxy, etc.
+	ResourceID string    `gorm:"type:varchar(36)" json:"resourceId,omitempty"`
+	Details    string    `gorm:"type:text" json:"details,omitempty"`
+	IPAddress  string    `gorm:"type:varchar(45)" json:"ipAddress,omitempty"`
+	Timestamp  time.Time `gorm:"index" json:"timestamp"`
 }
 
 func (a *AuditLog) BeforeCreate(tx *gorm.DB) error {

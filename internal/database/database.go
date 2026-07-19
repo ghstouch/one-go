@@ -5,10 +5,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/glebarez/sqlite"
 	"github.com/ghstouch/one-go/internal/config"
 	"github.com/ghstouch/one-go/internal/model"
 	"github.com/ghstouch/one-go/pkg/logger"
+	"github.com/glebarez/sqlite"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

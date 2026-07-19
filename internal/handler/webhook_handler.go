@@ -3,10 +3,10 @@ package handler
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/ghstouch/one-go/internal/model"
 	"github.com/ghstouch/one-go/internal/service"
 	"github.com/ghstouch/one-go/pkg/response"
+	"github.com/gin-gonic/gin"
 )
 
 // WebhookHandler handles webhook HTTP requests

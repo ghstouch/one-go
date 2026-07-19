@@ -3,9 +3,9 @@ package handler
 import (
 	"strconv"
 
-	"github.com/gin-gonic/gin"
 	"github.com/ghstouch/one-go/internal/service"
 	"github.com/ghstouch/one-go/pkg/response"
+	"github.com/gin-gonic/gin"
 )
 
 // AuditLogHandler handles audit log HTTP requests

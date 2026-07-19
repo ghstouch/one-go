@@ -5,15 +5,15 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gin-gonic/gin"
 	"github.com/ghstouch/one-go/internal/model"
 	"github.com/ghstouch/one-go/internal/service"
+	"github.com/gin-gonic/gin"
 )
 
 // mockAuthService implements service.AuthService for testing
 type mockAuthService struct {
-	validateErr  bool
-	claims       *service.Claims
+	validateErr bool
+	claims      *service.Claims
 }
 
 func (m *mockAuthService) Login(username, password string) (*service.TokenResponse, error) {

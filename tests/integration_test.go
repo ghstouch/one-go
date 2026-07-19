@@ -7,14 +7,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gin-gonic/gin"
-	"github.com/glebarez/sqlite"
 	"github.com/ghstouch/one-go/internal/config"
 	"github.com/ghstouch/one-go/internal/handler"
 	"github.com/ghstouch/one-go/internal/middleware"
 	"github.com/ghstouch/one-go/internal/model"
 	"github.com/ghstouch/one-go/internal/repository"
 	"github.com/ghstouch/one-go/internal/service"
+	"github.com/gin-gonic/gin"
+	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 )
 

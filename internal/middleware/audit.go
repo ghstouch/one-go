@@ -3,8 +3,8 @@ package middleware
 import (
 	"strings"
 
-	"github.com/gin-gonic/gin"
 	"github.com/ghstouch/one-go/internal/service"
+	"github.com/gin-gonic/gin"
 )
 
 // AuditMiddleware logs admin actions automatically

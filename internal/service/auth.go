@@ -4,10 +4,10 @@ import (
 	"errors"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/ghstouch/one-go/internal/config"
 	"github.com/ghstouch/one-go/internal/model"
 	"github.com/ghstouch/one-go/internal/repository"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
