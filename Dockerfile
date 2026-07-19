@@ -34,11 +34,11 @@ COPY --from=builder /app/web /app/web
 RUN mkdir -p /app/storage
 
 # Expose port
-EXPOSE 8080
+EXPOSE 2500
 
 # Set environment variables
 ENV GIN_MODE=release
-ENV SERVER_PORT=8080
+ENV SERVER_PORT=2500
 ENV SERVER_HOST=0.0.0.0
 
 # Run the application

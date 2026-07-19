@@ -66,7 +66,7 @@ make run
 go run ./cmd/server/main.go
 ```
 
-5. Open your browser at `http://localhost:8080`
+5. Open your browser at `http://localhost:2500`
 
 ### Default Login
 

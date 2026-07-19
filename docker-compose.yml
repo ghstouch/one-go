@@ -5,12 +5,12 @@ services:
     build: .
     container_name: one
     ports:
-      - "8080:8080"
+      - "2500:2500"
     volumes:
       - one-data:/app/storage
     environment:
       - GIN_MODE=release
-      - SERVER_PORT=8080
+      - SERVER_PORT=2500
       - SERVER_HOST=0.0.0.0
       - DB_DRIVER=sqlite
       - DB_SQLITE_PATH=/app/storage/one.db
