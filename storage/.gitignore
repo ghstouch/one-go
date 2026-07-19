@@ -1,0 +1,6 @@
+# OmniRoute Go storage directory
+# SQLite database will be stored here
+
+# Keep this directory in git but ignore its contents
+*
+!.gitignore

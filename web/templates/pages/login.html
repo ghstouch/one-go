@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - OmniRoute</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>[x-cloak] { display: none !important; }</style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900" x-data="loginForm()">
+    <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4">
+                <i class="fas fa-route text-white text-3xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-white">OmniRoute</h1>
+            <p class="text-gray-400 mt-2">AI Gateway Management</p>
+        </div>
+        <div class="bg-gray-800 rounded-2xl shadow-xl p-8">
+            <h2 class="text-xl font-semibold text-white mb-6">Sign in to your account</h2>
+            <div x-show="error" x-cloak class="mb-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg">
+                <p class="text-red-400 text-sm" x-text="error"></p>
+            </div>
+            <form @submit.prevent="login">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Username</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500"><i class="fas fa-user"></i></span>
+                            <input type="text" x-model="username" class="w-full pl-10 pr-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your username" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500"><i class="fas fa-lock"></i></span>
+                            <input :type="showPassword ? 'text' : 'password'" x-model="password" class="w-full pl-10 pr-10 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" required>
+                            <button type="button" @click="showPassword = !showPassword" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300">
+                                <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" :disabled="loading" class="w-full py-2.5 px-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium rounded-lg transition-all disabled:opacity-50">
+                        <span x-show="!loading">Sign In</span>
+                        <span x-show="loading">Signing in...</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <p class="text-center text-gray-500 text-sm mt-6">OmniRoute Go v1.0.0</p>
+    </div>
+</div>
+<script>
+function loginForm() {
+    return {
+        username: '', password: '', showPassword: false, loading: false, error: '',
+        async login() {
+            this.loading = true; this.error = '';
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: this.username, password: this.password })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error?.message || 'Login failed');
+                localStorage.setItem('token', data.data.token);
+                window.location.href = '/dashboard';
+            } catch (err) { this.error = err.message; }
+            finally { this.loading = false; }
+        }
+    }
+}
+</script>
+</body>
+</html>

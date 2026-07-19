@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{{ .title }}</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></head>
+<body class="bg-gray-100 min-h-screen">
+<div class="flex min-h-screen">
+    <aside class="w-64 bg-gray-900 min-h-screen flex flex-col">
+        <div class="p-4 border-b border-gray-800"><div class="flex items-center space-x-3"><div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center"><i class="fas fa-route text-white text-xl"></i></div><div><h1 class="text-white font-bold text-xl">OmniRoute</h1></div></div></div>
+        <nav class="flex-1 py-4"><ul class="space-y-1 px-3">
+            <li><a href="/dashboard" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800"><i class="fas fa-chart-line w-5"></i><span>Dashboard</span></a></li>
+            <li><a href="/providers" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800"><i class="fas fa-plug w-5"></i><span>Providers</span></a></li>
+            <li><a href="/combos" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800"><i class="fas fa-layer-group w-5"></i><span>Combos</span></a></li>
+            <li><a href="/usage" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800"><i class="fas fa-chart-bar w-5"></i><span>Usage</span></a></li>
+            <li><a href="/logs" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800"><i class="fas fa-list w-5"></i><span>Logs</span></a></li>
+            <li><a href="/api-keys" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800"><i class="fas fa-key w-5"></i><span>API Keys</span></a></li>
+            <li><a href="/proxy" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800"><i class="fas fa-network-wired w-5"></i><span>Proxy</span></a></li>
+            <li><a href="/settings-page" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "settings" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-cog w-5"></i><span>Settings</span></a></li>
+        </ul></nav>
+        <div class="p-4 border-t border-gray-800"><div class="flex items-center space-x-3"><div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center"><i class="fas fa-user text-gray-300"></i></div><span class="text-white text-sm">{{ .username }}</span><button onclick="logout()" class="text-gray-400 hover:text-white ml-auto"><i class="fas fa-sign-out-alt"></i></button></div></div>
+    </aside>
+    <main class="flex-1 p-8">
+        <div class="mb-8"><h1 class="text-3xl font-bold text-gray-900">Settings</h1><p class="text-gray-600">Configure application settings</p></div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">General Settings</h3>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div><p class="font-medium">Rate Limiting</p><p class="text-sm text-gray-500">Enable rate limiting per API key</p></div>
+                    <label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" class="sr-only peer" checked><div class="w-11 h-6 bg-gray-200 peer-checked:bg-blue-600 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div></label>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div><p class="font-medium">Track Metrics</p><p class="text-sm text-gray-500">Enable usage tracking and analytics</p></div>
+                    <label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" class="sr-only peer" checked><div class="w-11 h-6 bg-gray-200 peer-checked:bg-blue-600 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div></label>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script>function logout() { localStorage.removeItem('token'); window.location.href = '/login'; }</script>
+</body>
+</html>

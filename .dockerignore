@@ -1,0 +1,13 @@
+bin/
+*.exe
+*.test
+*.out
+.env
+storage/*.db
+storage/*.db-wal
+storage/*.db-shm
+.git
+.gitignore
+README.md
+TODO.md
+plan.txt

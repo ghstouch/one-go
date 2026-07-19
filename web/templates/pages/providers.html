@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+<div class="flex min-h-screen">
+    <aside class="w-64 bg-gray-900 min-h-screen flex flex-col">
+        <div class="p-4 border-b border-gray-800">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-route text-white text-xl"></i>
+                </div>
+                <div><h1 class="text-white font-bold text-xl">OmniRoute</h1><p class="text-gray-400 text-xs">AI Gateway</p></div>
+            </div>
+        </div>
+        <nav class="flex-1 py-4 overflow-y-auto">
+            <ul class="space-y-1 px-3">
+                <li><a href="/dashboard" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "dashboard" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-chart-line w-5"></i><span>Dashboard</span></a></li>
+                <li><a href="/providers" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "providers" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-plug w-5"></i><span>Providers</span></a></li>
+                <li><a href="/combos" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "combos" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-layer-group w-5"></i><span>Combos</span></a></li>
+                <li class="py-2"><div class="border-t border-gray-800"></div></li>
+                <li><a href="/usage" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "usage" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-chart-bar w-5"></i><span>Usage</span></a></li>
+                <li><a href="/logs" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "logs" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-list w-5"></i><span>Logs</span></a></li>
+                <li class="py-2"><div class="border-t border-gray-800"></div></li>
+                <li><a href="/api-keys" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "api-keys" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-key w-5"></i><span>API Keys</span></a></li>
+                <li><a href="/proxy" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "proxy" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-network-wired w-5"></i><span>Proxy</span></a></li>
+                <li><a href="/settings-page" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "settings" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-cog w-5"></i><span>Settings</span></a></li>
+            </ul>
+        </nav>
+        <div class="p-4 border-t border-gray-800">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center"><i class="fas fa-user text-gray-300"></i></div>
+                <div class="flex-1"><p class="text-white text-sm font-medium">{{ .username }}</p><p class="text-gray-400 text-xs">Admin</p></div>
+                <button onclick="logout()" class="text-gray-400 hover:text-white"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-8" x-data="providerApp()">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Providers</h1>
+                <p class="text-gray-600 mt-1">Manage AI provider connections</p>
+            </div>
+            <button @click="openModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center">
+                <i class="fas fa-plus mr-2"></i>Add Provider
+            </button>
+        </div>
+
+        <!-- Alert -->
+        <div x-show="alert.show" x-transition class="mb-4 px-4 py-3 rounded-lg" :class="alert.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'">
+            <span x-text="alert.message"></span>
+        </div>
+
+        <!-- Loading -->
+        <div x-show="loading" class="text-center py-12">
+            <i class="fas fa-spinner fa-spin text-blue-500 text-3xl"></i>
+            <p class="text-gray-500 mt-3">Loading providers...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div x-show="!loading && providers.length === 0" class="bg-white rounded-xl shadow-sm p-12 text-center border">
+            <i class="fas fa-plug text-gray-300 text-5xl mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900">No providers configured</h3>
+            <p class="text-gray-500 mt-2">Add your first provider to get started</p>
+            <button @click="openModal()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                <i class="fas fa-plus mr-2"></i>Add Provider
+            </button>
+        </div>
+
+        <!-- Provider List -->
+        <div x-show="!loading && providers.length > 0" class="space-y-4">
+            <template x-for="p in providers" :key="p.id">
+                <div class="bg-white rounded-xl shadow-sm border p-5 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center" :class="typeColor(p.type)">
+                                <i :class="typeIcon(p.type)" class="text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900" x-text="p.name"></h3>
+                                <div class="flex items-center space-x-3 mt-1">
+                                    <span class="text-xs px-2 py-0.5 rounded-full font-medium" :class="p.type === 'openai' ? 'bg-green-100 text-green-700' : p.type === 'anthropic' ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-700'" x-text="p.type.toUpperCase()"></span>
+                                    <span class="text-xs text-gray-500" x-text="p.baseUrl"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <!-- Status toggle -->
+                            <button @click="toggleStatus(p)" class="px-3 py-1 rounded-full text-xs font-medium" :class="p.status === 'active' ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-red-100 text-red-700 hover:bg-red-200'" x-text="p.status === 'active' ? 'Active' : 'Inactive'"></button>
+                            <!-- Test Connection -->
+                            <button @click="testConnection(p.id)" class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm" :disabled="testing === p.id">
+                                <i class="fas fa-bolt mr-1" :class="testing === p.id ? 'fa-spin fa-spinner' : ''"></i>Test
+                            </button>
+                            <!-- Edit -->
+                            <button @click="openModal(p)" class="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 text-sm">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </button>
+                            <!-- Delete -->
+                            <button @click="confirmDelete(p)" class="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 text-sm">
+                                <i class="fas fa-trash mr-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Endpoints -->
+                    <div x-show="p.endpoints && p.endpoints.length > 0" class="mt-3 flex flex-wrap gap-2">
+                        <template x-for="ep in p.endpoints" :key="ep">
+                            <span class="text-xs px-2 py-1 bg-blue-50 text-blue-600 rounded-md" x-text="ep"></span>
+                        </template>
+                    </div>
+                    <!-- Description -->
+                    <p x-show="p.description" class="mt-2 text-sm text-gray-500" x-text="p.description"></p>
+                </div>
+            </template>
+        </div>
+
+        <!-- Modal: Add/Edit Provider -->
+        <div x-show="modal.open" x-transition.opacity class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" @click.self="closeModal()">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto" x-transition>
+                <div class="p-6 border-b">
+                    <h2 class="text-xl font-bold text-gray-900" x-text="modal.editing ? 'Edit Provider' : 'Add Provider'"></h2>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Name <span class="text-red-500">*</span></label>
+                        <input x-model="form.name" type="text" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="e.g. OpenAI Production">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Type <span class="text-red-500">*</span></label>
+                        <select x-model="form.type" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                            <option value="">Select type</option>
+                            <option value="openai">OpenAI</option>
+                            <option value="anthropic">Anthropic</option>
+                            <option value="oauth">OAuth</option>
+                            <option value="cookie">Cookie</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Base URL <span class="text-red-500">*</span></label>
+                        <input x-model="form.baseUrl" type="text" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="https://api.openai.com/v1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">API Key</label>
+                        <input x-model="form.apiKey" type="password" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="sk-...">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <textarea x-model="form.description" rows="2" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="Optional description"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <select x-model="form.status" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <!-- Error -->
+                    <div x-show="modal.error" class="bg-red-50 text-red-700 px-4 py-2 rounded-lg text-sm" x-text="modal.error"></div>
+                </div>
+                <div class="p-6 border-t flex justify-end space-x-3">
+                    <button @click="closeModal()" class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">Cancel</button>
+                    <button @click="saveProvider()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" :disabled="modal.saving">
+                        <i x-show="modal.saving" class="fas fa-spinner fa-spin mr-1"></i>
+                        <span x-text="modal.editing ? 'Update' : 'Create'"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Confirm Delete -->
+        <div x-show="del.open" x-transition.opacity class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" @click.self="del.open = false">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm mx-4" x-transition>
+                <div class="p-6 text-center">
+                    <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Delete Provider?</h3>
+                    <p class="text-gray-500 mt-2">Are you sure you want to delete <span class="font-medium text-gray-900" x-text="del.name"></span>? This cannot be undone.</p>
+                </div>
+                <div class="p-6 border-t flex justify-end space-x-3">
+                    <button @click="del.open = false" class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">Cancel</button>
+                    <button @click="deleteProvider()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700" :disabled="del.loading">
+                        <i x-show="del.loading" class="fas fa-spinner fa-spin mr-1"></i>Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+function logout() { localStorage.removeItem('token'); window.location.href = '/login'; }
+
+function providerApp() {
+    return {
+        providers: [],
+        loading: true,
+        testing: null,
+        alert: { show: false, message: '', type: 'success' },
+        modal: { open: false, editing: false, error: '', saving: false },
+        del: { open: false, id: '', name: '', loading: false },
+        form: { name: '', type: '', baseUrl: '', apiKey: '', description: '', status: 'active' },
+
+        async init() {
+            await this.fetchProviders();
+        },
+
+        token() {
+            return { 'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json' };
+        },
+
+        showAlert(msg, type = 'success') {
+            this.alert = { show: true, message: msg, type };
+            setTimeout(() => this.alert.show = false, 3000);
+        },
+
+        async fetchProviders() {
+            this.loading = true;
+            try {
+                const r = await fetch('/api/providers', { headers: this.token() });
+                const d = await r.json();
+                this.providers = d.success ? (d.data || []) : [];
+            } catch (e) {
+                this.showAlert('Failed to load providers', 'error');
+            }
+            this.loading = false;
+        },
+
+        openModal(provider = null) {
+            if (provider) {
+                this.modal.editing = true;
+                this.modal.editId = provider.id;
+                this.form = { name: provider.name, type: provider.type, baseUrl: provider.baseUrl, apiKey: '', description: provider.description || '', status: provider.status };
+            } else {
+                this.modal.editing = false;
+                this.modal.editId = null;
+                this.form = { name: '', type: '', baseUrl: '', apiKey: '', description: '', status: 'active' };
+            }
+            this.modal.error = '';
+            this.modal.open = true;
+        },
+
+        closeModal() {
+            this.modal.open = false;
+            this.modal.error = '';
+        },
+
+        async saveProvider() {
+            this.modal.saving = true;
+            this.modal.error = '';
+            try {
+                const url = this.modal.editing ? '/api/providers/' + this.modal.editId : '/api/providers';
+                const method = this.modal.editing ? 'PUT' : 'POST';
+                const body = { name: this.form.name, type: this.form.type, baseUrl: this.form.baseUrl, description: this.form.description, status: this.form.status };
+                if (this.form.apiKey) body.apiKey = this.form.apiKey;
+                const r = await fetch(url, { method, headers: this.token(), body: JSON.stringify(body) });
+                const d = await r.json();
+                if (d.success) {
+                    this.closeModal();
+                    this.showAlert(this.modal.editing ? 'Provider updated' : 'Provider created');
+                    await this.fetchProviders();
+                } else {
+                    this.modal.error = d.message || 'Failed to save provider';
+                }
+            } catch (e) {
+                this.modal.error = 'Network error';
+            }
+            this.modal.saving = false;
+        },
+
+        async toggleStatus(p) {
+            const newStatus = p.status === 'active' ? 'inactive' : 'active';
+            try {
+                const r = await fetch('/api/providers/' + p.id, {
+                    method: 'PUT', headers: this.token(),
+                    body: JSON.stringify({ name: p.name, type: p.type, baseUrl: p.baseUrl, status: newStatus, description: p.description })
+                });
+                const d = await r.json();
+                if (d.success) {
+                    p.status = newStatus;
+                    this.showAlert('Provider ' + (newStatus === 'active' ? 'activated' : 'deactivated'));
+                }
+            } catch (e) {
+                this.showAlert('Failed to update status', 'error');
+            }
+        },
+
+        confirmDelete(p) {
+            this.del = { open: true, id: p.id, name: p.name, loading: false };
+        },
+
+        async deleteProvider() {
+            this.del.loading = true;
+            try {
+                const r = await fetch('/api/providers/' + this.del.id, { method: 'DELETE', headers: this.token() });
+                const d = await r.json();
+                if (d.success) {
+                    this.del.open = false;
+                    this.showAlert('Provider deleted');
+                    await this.fetchProviders();
+                } else {
+                    this.showAlert(d.message || 'Failed to delete', 'error');
+                }
+            } catch (e) {
+                this.showAlert('Network error', 'error');
+            }
+            this.del.loading = false;
+        },
+
+        async testConnection(id) {
+            this.testing = id;
+            try {
+                const r = await fetch('/api/providers/' + id + '/test', { method: 'POST', headers: this.token() });
+                const d = await r.json();
+                if (d.success) {
+                    this.showAlert('Connection successful!');
+                } else {
+                    this.showAlert(d.message || 'Connection failed', 'error');
+                }
+            } catch (e) {
+                this.showAlert('Test failed: network error', 'error');
+            }
+            this.testing = null;
+        },
+
+        typeColor(type) {
+            const colors = { openai: 'bg-green-500', anthropic: 'bg-orange-500', oauth: 'bg-blue-500', cookie: 'bg-gray-500' };
+            return colors[type] || 'bg-gray-500';
+        },
+
+        typeIcon(type) {
+            const icons = { openai: 'fas fa-robot', anthropic: 'fas fa-brain', oauth: 'fas fa-key', cookie: 'fas fa-cookie' };
+            return icons[type] || 'fas fa-server';
+        }
+    }
+}
+</script>
+</body>
+</html>

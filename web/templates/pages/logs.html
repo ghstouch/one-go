@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+<div class="flex min-h-screen">
+    <aside class="w-64 bg-gray-900 min-h-screen flex flex-col">
+        <div class="p-4 border-b border-gray-800"><div class="flex items-center space-x-3"><div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center"><i class="fas fa-route text-white text-xl"></i></div><div><h1 class="text-white font-bold text-xl">OmniRoute</h1><p class="text-gray-400 text-xs">AI Gateway</p></div></div></div>
+        <nav class="flex-1 py-4 overflow-y-auto"><ul class="space-y-1 px-3">
+            <li><a href="/dashboard" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "dashboard" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-chart-line w-5"></i><span>Dashboard</span></a></li>
+            <li><a href="/providers" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "providers" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-plug w-5"></i><span>Providers</span></a></li>
+            <li><a href="/combos" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "combos" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-layer-group w-5"></i><span>Combos</span></a></li>
+            <li class="py-2"><div class="border-t border-gray-800"></div></li>
+            <li><a href="/usage" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "usage" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-chart-bar w-5"></i><span>Usage</span></a></li>
+            <li><a href="/logs" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "logs" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-list w-5"></i><span>Logs</span></a></li>
+            <li class="py-2"><div class="border-t border-gray-800"></div></li>
+            <li><a href="/api-keys" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "api-keys" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-key w-5"></i><span>API Keys</span></a></li>
+            <li><a href="/proxy" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "proxy" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-network-wired w-5"></i><span>Proxy</span></a></li>
+            <li><a href="/settings-page" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ if eq .active "settings" }}bg-blue-600 text-white{{ else }}text-gray-300 hover:bg-gray-800{{ end }}"><i class="fas fa-cog w-5"></i><span>Settings</span></a></li>
+        </ul></nav>
+        <div class="p-4 border-t border-gray-800"><div class="flex items-center space-x-3"><div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center"><i class="fas fa-user text-gray-300"></i></div><div class="flex-1"><p class="text-white text-sm font-medium">{{ .username }}</p></div><button onclick="logout()" class="text-gray-400 hover:text-white"><i class="fas fa-sign-out-alt"></i></button></div></div>
+    </aside>
+    <main class="flex-1 p-8" x-data="logsApp()">
+        <div class="mb-8"><h1 class="text-3xl font-bold text-gray-900">Logs</h1><p class="text-gray-600 mt-1">Request and response call logs</p></div>
+        <div class="bg-white rounded-xl shadow-sm border p-4 mb-6 flex items-center space-x-4">
+            <div><label class="text-xs text-gray-500">Provider</label><input x-model="filter.provider" type="text" class="block px-3 py-1.5 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="All"></div>
+            <div><label class="text-xs text-gray-500">Type</label>
+                <select x-model="filter.isError" class="block px-3 py-1.5 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"><option value="">All</option><option value="true">Errors Only</option><option value="false">Success Only</option></select></div>
+            <button @click="page=1;fetch()" class="mt-4 px-4 py-1.5 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"><i class="fas fa-search mr-1"></i>Filter</button>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-50"><tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Time</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Method</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Path</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Provider</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Latency</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Error</th>
+                </tr></thead>
+                <tbody class="divide-y">
+                    <template x-for="l in items" :key="l.id">
+                        <tr class="hover:bg-gray-50 cursor-pointer" @click="detail=l">
+                            <td class="px-4 py-3 text-sm text-gray-600" x-text="new Date(l.timestamp).toLocaleString()"></td>
+                            <td class="px-4 py-3 text-sm font-mono" x-text="l.requestMethod"></td>
+                            <td class="px-4 py-3 text-sm text-gray-600 font-mono" x-text="l.requestPath"></td>
+                            <td class="px-4 py-3 text-sm" x-text="l.provider"></td>
+                            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full" :class="l.isError?'bg-red-100 text-red-700':'bg-green-100 text-green-700'" x-text="l.statusCode"></span></td>
+                            <td class="px-4 py-3 text-sm text-right" x-text="l.latencyMs+'ms'"></td>
+                            <td class="px-4 py-3 text-sm text-red-600 truncate max-w-xs" x-text="l.errorMessage"></td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+            <div x-show="items.length===0 && !loading" class="p-8 text-center text-gray-400">No logs found</div>
+        </div>
+        <div x-show="totalPages>1" class="mt-4 flex justify-center items-center space-x-2">
+            <button @click="page>1&&(page--,fetch())" class="px-3 py-1 rounded-lg bg-white border text-sm" :disabled="page<=1">Prev</button>
+            <span class="text-sm text-gray-600" x-text="'Page '+page+' of '+totalPages"></span>
+            <button @click="page<totalPages&&(page++,fetch())" class="px-3 py-1 rounded-lg bg-white border text-sm" :disabled="page>=totalPages">Next</button>
+        </div>
+        <div x-show="detail" x-transition.opacity class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" @click.self="detail=null">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto" x-transition>
+                <div class="p-6 border-b flex justify-between items-center"><h2 class="text-xl font-bold">Log Detail</h2><button @click="detail=null" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button></div>
+                <div class="p-6 space-y-3" x-show="detail">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><span class="text-xs text-gray-500">Method</span><p class="font-mono" x-text="detail.requestMethod"></p></div>
+                        <div><span class="text-xs text-gray-500">Status</span><p x-text="detail.statusCode"></p></div>
+                        <div><span class="text-xs text-gray-500">Provider</span><p x-text="detail.provider"></p></div>
+                        <div><span class="text-xs text-gray-500">Latency</span><p x-text="detail.latencyMs+'ms'"></p></div>
+                    </div>
+                    <div><span class="text-xs text-gray-500">Path</span><p class="font-mono text-sm break-all" x-text="detail.requestPath"></p></div>
+                    <div x-show="detail.requestBody"><span class="text-xs text-gray-500">Request Body</span><pre class="bg-gray-50 p-3 rounded-lg text-xs overflow-x-auto mt-1" x-text="detail.requestBody"></pre></div>
+                    <div x-show="detail.responseBody"><span class="text-xs text-gray-500">Response Body</span><pre class="bg-gray-50 p-3 rounded-lg text-xs overflow-x-auto mt-1 max-h-40" x-text="detail.responseBody"></pre></div>
+                    <div x-show="detail.errorMessage"><span class="text-xs text-gray-500">Error</span><p class="text-red-600 text-sm" x-text="detail.errorMessage"></p></div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script>
+function logout(){localStorage.removeItem('token');window.location.href='/login'}
+function logsApp(){return{
+    items:[],loading:false,page:1,pageSize:20,totalPages:0,detail:null,
+    filter:{provider:'',isError:''},
+    async init(){await this.fetch()},
+    token(){return{'Authorization':'Bearer '+localStorage.getItem('token')}},
+    async fetch(){this.loading=true;try{let url='/api/usage/logs?page='+this.page+'&pageSize='+this.pageSize;if(this.filter.provider)url+='&provider='+this.filter.provider;if(this.filter.isError)url+='&isError='+this.filter.isError;const r=await fetch(url,{headers:this.token()});const d=await r.json();this.items=d.data||[];if(d.pagination)this.totalPages=d.pagination.totalPages}catch(e){}this.loading=false}
+}}
+</script>
+</body>
+</html>

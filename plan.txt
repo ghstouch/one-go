@@ -1,0 +1,339 @@
+```
+Saya ingin membuat project baru menggunakan Go (Golang).
+
+Tujuan:
+Membangun aplikasi yang mempunyai struktur menu, alur kerja, dan fitur yang setara dengan project OmniRoute (https://github.com/diegosouzapw/OmniRoute).
+
+JANGAN melakukan copy-paste source code.
+Implementasikan semuanya dari nol menggunakan idiomatic Go.
+
+Requirement:
+
+Menu utama HARUS memiliki:
+
+1. Provider
+   - CRUD Provider
+   - Enable/Disable
+   - Test Connection
+   - API Key
+   - Base URL
+   - Model list
+   - Status
+
+2. Kombo
+   - CRUD Kombo
+   - Mapping beberapa provider ke satu kombo
+   - Priority
+   - Weight
+   - Fallback
+   - Round Robin
+
+3. Provider Kuota
+   - List quota tiap provider
+   - Edit quota
+   - Reset quota
+   - Daily usage
+   - Monthly usage
+   - Remaining quota
+
+4. Usage
+   - Total request
+   - Success
+   - Failed
+   - Token usage
+   - Cost
+   - Filter berdasarkan provider
+   - Filter tanggal
+
+5. Logs
+   - Request log
+   - Response log
+   - Error log
+   - Search
+   - Pagination
+   - Detail request
+
+6. Proxy
+   - CRUD proxy
+   - HTTP/SOCKS5
+   - Username/password
+   - Test proxy
+   - Enable/Disable
+
+7. Proxy Logs
+   - Proxy digunakan
+   - Status
+   - Response time
+   - Error
+   - Last used
+
+8. Endpoint + API Key
+   - Generate API Key
+   - Revoke API Key
+   - Rate limit
+   - Endpoint management
+   - Authentication middleware
+
+Technical Stack:
+
+Backend:
+- Go 1.24+
+- Gin
+- GORM
+- SQLite (default)
+- PostgreSQL support
+- JWT Authentication
+- REST API
+- Clean Architecture
+- Repository Pattern
+- Service Layer
+- Dependency Injection
+- Structured Logging
+- Graceful Shutdown
+
+Frontend:
+- HTMX
+- TailwindCSS
+- Alpine.js
+
+Folder Structure:
+
+cmd/
+internal/
+    handler/
+    service/
+    repository/
+    model/
+    middleware/
+    config/
+    auth/
+    proxy/
+    provider/
+    usage/
+    logger/
+web/
+migrations/
+storage/
+
+Buat aplikasi modular sehingga setiap menu mempunyai package sendiri.
+
+Jangan membuat satu file besar.
+
+Kerjakan bertahap.
+
+Tahap pertama:
+- Setup project
+- Struktur folder
+- Konfigurasi database
+- Login
+- Dashboard
+- Sidebar
+
+Setelah selesai, berhenti dan tunggu instruksi saya.
+```
+
+---
+
+
+```
+Analisis terlebih dahulu repository OmniRoute.
+
+Identifikasi:
+- Semua menu
+- Semua endpoint
+- Semua model database
+- Semua relasi
+- Semua workflow
+- Semua middleware
+- Semua halaman UI
+
+Setelah analisis selesai, buat TODO.md yang berisi checklist seluruh fitur.
+
+Jangan menulis kode sebelum TODO.md selesai.
+
+Implementasikan satu persatu sesuai checklist.
+
+Setiap fitur harus selesai, dapat dijalankan, dan dapat dites sebelum lanjut ke fitur berikutnya.
+```
+
+```
+Rules:
+
+- Jangan membuat asumsi.
+- Jika ada fitur yang belum jelas, analisis repository terlebih dahulu.
+- Jangan menghapus kode yang sudah berjalan.
+- Selalu gunakan interface.
+- Semua CRUD harus memiliki validation.
+- Semua endpoint harus memiliki unit test.
+- Semua query menggunakan repository.
+- Semua konfigurasi melalui .env.
+- Semua error menggunakan custom error.
+- Semua log menggunakan structured logging.
+- Setiap selesai satu fitur, update TODO.md.
+```
+
+---
+
+## ✅ SUDAH SELESAI (Phase 1-9)
+
+### Phase 1: Foundation ✅
+- Project setup, folder structure, database, migrations
+- JWT auth, login/logout, dashboard, sidebar
+
+### Phase 2: Provider Management ✅
+- Model, repository, service, handler (CRUD)
+- Test connection, API key validation
+- UI pages (Alpine.js + TailwindCSS)
+
+### Phase 3: Combo (Routing) ✅
+- Combo + ComboTarget model, CRUD
+- Routing strategies: priority, round-robin, weighted, fallback
+- UI pages
+
+### Phase 4: API Keys ✅
+- ApiKey model, CRUD, generate/revoke
+- API key validation middleware (v1 endpoints)
+- Per-key rate limiting (per-minute, per-day)
+- Scopes & permissions (chat, completions, embeddings, models)
+- Model access control (allowed/blocked)
+- UI pages
+
+### Phase 5: Quota Management ✅
+- Quota service (daily/monthly tracking via usage_history)
+- Quota handler + routes
+
+### Phase 6: Usage & Logs ✅
+- UsageHistory + CallLog models
+- Usage handler with pagination, filtering, stats
+- Call logs with detail view
+- CSV export (GET /api/usage/export)
+- Usage UI + Logs UI
+
+### Phase 7: Proxy Management ✅
+- Proxy + ProxyLog models, CRUD
+- Test connection (TCP dial)
+- Proxy assignment to providers (ProxyID field)
+- v1 handler uses provider's proxy for forwarding
+- Proxy UI + logs table
+
+### Phase 8: OpenAI Compatible API ✅
+- POST /v1/chat/completions (with SSE streaming)
+- POST /v1/completions
+- POST /v1/embeddings
+- GET /v1/models
+- API key auth middleware + rate limiting + scope/model checking
+- Proxy-aware HTTP client
+
+### Phase 9: Settings & Config ✅
+- Settings model, repository, service, handler
+- Settings UI page
+
+### Unit Tests ✅
+- 66 tests passing across 7 test files
+- provider_service_test.go, apikey_service_test.go, combo_service_test.go
+- proxy_service_test.go, routing_service_test.go
+- usage_service_test.go, settings_service_test.go
+
+---
+
+## 📋 SISA UNTUK BESOK (Phase 10: Polish & Testing)
+
+### 1. API Unit Tests
+- [x] v1_handler_test.go — test ChatCompletions, Completions, Embeddings, ListModels
+- [x] Mock provider repo + usage service
+- [x] Test scope rejection, model access rejection
+- [x] Test streaming mode (mock SSE response)
+
+### 2. Handler Unit Tests
+- [x] v1_handler_test.go — 14 tests (scope checks, model access, validation)
+
+### 3. Middleware Unit Tests
+- [x] ratelimit_test.go — 8 tests (rate limiter, API key rate limiter, middleware integration)
+- [x] auth_test.go — test JWT validation, role checking (10 tests)
+
+### 4. Integration Tests
+- [x] Full API flow: create provider → create combo → generate key → call v1/chat/completions
+- [x] Database integration with SQLite in-memory
+- [x] Auth flow: login → get token → access protected routes
+
+### 5. Docker Support
+- [x] Dockerfile (multi-stage build) — sudah ada
+- [x] docker-compose.yml
+- [x] .dockerignore
+
+### 6. Documentation
+- [x] README.md — setup, build, run, API docs (all endpoints listed)
+- [x] API endpoint documentation (all routes)
+- [x] .env.example — sudah ada
+
+### 7. Performance & Security
+- [x] Request body size limits (10MB via BodyLimitMiddleware)
+- [x] SQL injection review (GORM handles this) ✅
+- [x] Credential masking in logs (MaskCredential helper)
+- [x] HTTPS redirect option
+- [x] Graceful shutdown already implemented ✅
+
+### 8. Optional Enhancements
+- [x] Model aliases (map user-friendly names to provider models) ✅
+- [x] Webhook notifications ✅
+- [x] Audit log for admin actions ✅
+- [x] Bulk operations (batch delete) ✅
+- [x] Health check improvements (per-provider status) ✅
+
+---
+
+## 📊 Current File Structure
+
+```
+one-go/
+├── cmd/server/main.go
+├── internal/
+│   ├── config/config.go
+│   ├── database/database.go
+│   ├── handler/
+│   │   ├── auth.go, dashboard.go, settings.go
+│   │   ├── provider_handler.go
+│   │   ├── combo_handler.go
+│   │   ├── apikey_handler.go
+│   │   ├── usage_handler.go
+│   │   ├── proxy_handler.go
+│   │   ├── quota_handler.go
+│   │   └── v1_handler.go
+│   ├── service/
+│   │   ├── auth.go, settings.go
+│   │   ├── provider_service.go
+│   │   ├── combo_service.go
+│   │   ├── apikey_service.go
+│   │   ├── usage_service.go
+│   │   ├── proxy_service.go
+│   │   ├── quota_service.go
+│   │   └── routing_service.go
+│   ├── repository/
+│   │   ├── interface.go, user.go, settings.go
+│   │   ├── provider_repository.go
+│   │   ├── combo_repository.go
+│   │   ├── apikey_repository.go
+│   │   ├── usage_repository.go
+│   │   └── proxy_repository.go
+│   ├── model/
+│   │   ├── user.go, settings.go, provider.go
+│   │   ├── combo.go, apikey.go
+│   │   ├── usage.go, proxy.go
+│   │   └── provider.go (+ ProxyID field)
+│   ├── middleware/
+│   │   ├── auth.go (JWT + API key middleware)
+│   │   ├── cors.go, logging.go
+│   │   └── ratelimit.go (global + per-key)
+│   └── router/router.go
+├── pkg/
+│   ├── logger/logger.go
+│   └── response/response.go
+├── web/templates/pages/
+│   ├── login.html, dashboard.html
+│   ├── providers.html, combos.html
+│   ├── apikeys.html, usage.html
+│   ├── logs.html, proxy.html
+│   └── settings.html
+├── internal/service/*_test.go (7 files, 66 tests)
+├── TODO.md, plan.txt, go.mod, Dockerfile, Makefile
+```
